@@ -59,15 +59,15 @@ def load_player_data(cpm):
         data = response.get('data')
         if all(key in data for key in ['floats', 'localID', 'money', 'coin', "integers"]):
         
-            print(Colorate.Horizontal(Colors.rainbow, f'==========[ {__CHANNEL_USERNAME__} ]=========='))   
-         
-            print(Colorate.Horizontal(Colors.rainbow, f'Name        : {data.get('Name', 'UNDEFINED')}")
+            print(Colorate.Horizontal(Colors.rainbow, f'==========[ {__CHANNEL_USERNAME__} ]=========='))
             
-            print(Colorate.Horizontal(Colors.rainbow, f'LocalID     : {data.get('localID', 'UNDEFINED')}")
+            print(Colorate.Horizontal(Colors.rainbow, f'Name   : {(data.get("Name") if "Name" in data else "UNDEFINED")}.'))
+                
+            print(Colorate.Horizontal(Colors.rainbow, f'LocalID: {data.get("localID")}.'))
             
-            print(Colorate.Horizontal(Colors.rainbow, f'Moneys      : {data.get('money', 'UNDEFINED')}")
+            print(Colorate.Horizontal(Colors.rainbow, f'Money  : {data.get("money")}.'))
             
-            print(Colorate.Horizontal(Colors.rainbow, f'Coins       : {data.get('coin', 'UNDEFINED')}")
+            print(Colorate.Horizontal(Colors.rainbow, f'Coins  : {data.get("coin")}.'))
             
             friends_count = len(data.get("FriendsID", []))
             print(Colorate.Horizontal(Colors.rainbow, f'Friends     : {friends_count}")
