@@ -70,11 +70,11 @@ def load_player_data(cpm):
             print(Colorate.Horizontal(Colors.rainbow, f'Coins  : {data.get("coin")}.'))
             
             friends_count = len(data.get("FriendsID", []))
-            print(Colorate.Horizontal(Colors.rainbow, f'Friends  : {data.get("friends_count")}.'))
+            print(Colorate.Horizontal(Colors.rainbow, f'Friends     : {friends_count}')
             car_data = data.get("carIDnStatus", {}).get("carGeneratedIDs", [])
             unique_car_data = set(car_data)
             car_count = len(unique_car_data)
-            print(Colorate.Horizontal(Colors.rainbow, f'Cars  : {data.get("car_count")}.'))
+            print(Colorate.Horizontal(Colors.rainbow, f'Car Count   : {car_count}')
             
         else:
             print(Colorate.Horizontal(Colors.rainbow, '! ERROR: new accounts most be signed-in to the game at least once !.'))
