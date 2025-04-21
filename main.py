@@ -59,18 +59,22 @@ def load_player_data(cpm):
         data = response.get('data')
         if all(key in data for key in ['floats', 'localID', 'money', 'coin', "integers"]):
         
-            print(Colorate.Horizontal(Colors.rainbow, f'==========[ {__CHANNEL_USERNAME__} ]=========='))
+            print(Colorate.Horizontal(Colors.rainbow, f'==========[ {__CHANNEL_USERNAME__} ]=========='))   
+         
+            print(Colorate.Horizontal(Colors.rainbow, f'Name        : {data.get('Name', 'UNDEFINED')}")
             
-            console.print(f"[bold white]   >> Name        : {data.get('Name', 'UNDEFINED')}[/bold white]")
-            console.print(f"[bold white]   >> LocalID     : {data.get('localID', 'UNDEFINED')}[/bold white]")
-            console.print(f"[bold white]   >> Moneys      : {data.get('money', 'UNDEFINED')}[/bold white]")
-            console.print(f"[bold white]   >> Coins       : {data.get('coin', 'UNDEFINED')}[/bold white]")
+            print(Colorate.Horizontal(Colors.rainbow, f'LocalID     : {data.get('localID', 'UNDEFINED')}")
+            
+            print(Colorate.Horizontal(Colors.rainbow, f'Moneys      : {data.get('money', 'UNDEFINED')}")
+            
+            print(Colorate.Horizontal(Colors.rainbow, f'Coins       : {data.get('coin', 'UNDEFINED')}")
+            
             friends_count = len(data.get("FriendsID", []))
-            console.print(f"[bold white]   >> Friends     : {friends_count}[/bold white]")
+            print(Colorate.Horizontal(Colors.rainbow, f'Friends     : {friends_count}")
             car_data = data.get("carIDnStatus", {}).get("carGeneratedIDs", [])
             unique_car_data = set(car_data)
             car_count = len(unique_car_data)
-            console.print(f"[bold white]   >> Car Count   : {car_count}[/bold white]")
+            print(Colorate.Horizontal(Colors.rainbow, f'Car Count   : {car_count}")
             
         else:
             print(Colorate.Horizontal(Colors.rainbow, '! ERROR: new accounts most be signed-in to the game at least once !.'))
