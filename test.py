@@ -1,40 +1,45 @@
 import requests
+import urllib.parse
 
 __ENDPOINT_URL__: str = "https://telmunnshop.squareweb.app/api"
 
-class CPMTooldev:
+class Bubcyz:
     def __init__(self, access_key) -> None:
         self.auth_token = None
         self.access_key = access_key
     
     def login(self, email, password) -> int:
         payload = { "account_email": email, "account_password": password }
-        params = { 
-            "key": self.access_key, 
-            "acc_email": email, 
-            "acc_pass": password
-        }
+        params = { "key": self.access_key }
         response = requests.post(f"{__ENDPOINT_URL__}/account_login", params=params, data=payload)
         response_decoded = response.json()
         if response_decoded.get("ok"):
             self.auth_token = response_decoded.get("auth")
         return response_decoded.get("error")
-
+    
+    
     def change_email(self, new_email):
+        decoded_email = urllib.parse.unquote(new_email)
         payload = {
             "account_auth": self.auth_token,
-            "new_email": new_email
+            "new_email": decoded_email
         }
-        params = {
-            "key": self.access_key,
-            "new_email": new_email
-        }
+        params = {"key": self.access_key} 
         response = requests.post(f"{__ENDPOINT_URL__}/change_email", params=params, data=payload)
         response_decoded = response.json()
         if response_decoded.get("new_token"):
             self.auth_token = response_decoded["new_token"]
         return response_decoded.get("ok")
     
+    def change_password(self, new_password):
+        payload = { "account_auth": self.auth_token, "new_password": new_password }
+        params = { "key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/change_password", params=params, data=payload)
+        response_decoded = response.json()
+        if response_decoded.get("new_token"):
+            self.auth_token = response_decoded["new_token"]
+        return response_decoded.get("ok")
+        
     def register(self, email, password) -> int:
         payload = { "account_email": email, "account_password": password }
         params = { "key": self.access_key }
@@ -200,15 +205,11 @@ class CPMTooldev:
     
     def account_clone(self, account_email, account_password) -> bool:
         payload = { "account_auth": self.auth_token, "account_email": account_email, "account_password": account_password }
-        params = { 
-            "key": self.access_key, 
-            "acc_email": account_email, 
-            "acc_pass": account_password
-        }
+        params = { "key": self.access_key }
         response = requests.post(f"{__ENDPOINT_URL__}/clone", params=params, data=payload)
         response_decoded = response.json()
         return response_decoded.get("ok")
-    
+        
     def set_player_plates(self) -> bool:
         payload = { "account_auth": self.auth_token }
         params = { "key": self.access_key }
@@ -237,10 +238,10 @@ class CPMTooldev:
         response_decoded = response.json()
         return response_decoded.get("ok")
 
-    def hack_car_speed(self, new_hp, new_inner_hp, new_nm, new_torque) -> bool:
+    def hack_car_speed(self, car_id, new_hp, new_inner_hp, new_nm, new_torque):
         payload = {
             "account_auth": self.auth_token,
-            "car_id": self.auth_token,
+            "car_id": car_id,
             "new_hp": new_hp,
             "new_inner_hp": new_inner_hp,
             "new_nm": new_nm,
@@ -299,5 +300,78 @@ class CPMTooldev:
         }
         params = {"key": self.access_key}
         response = requests.post(f"{__ENDPOINT_URL__}/brake_car", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
+
+    def unlock_crown(self) -> bool:
+        payload = { "account_auth": self.auth_token }
+        params = { "key": self.access_key }
+        response = requests.post(f"{__ENDPOINT_URL__}/unlock_crown", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
+
+    def rear_bumper(self, car_id):
+        payload = {
+        "account_auth": self.auth_token,
+        "car_id": car_id,
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/rear_bumper", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
+        
+    def front_bumper(self, car_id):
+        payload = {
+        "account_auth": self.auth_token,
+        "car_id": car_id,
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/front_bumper", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
+
+    def shittin(self) -> bool: 
+        payload = { "account_auth": self.auth_token } 
+        params = { "key": self.access_key } 
+        response = requests.post(f"{__ENDPOINT_URL__}/shittin", params=params, data=payload) 
+        response_decoded = response.json() 
+        return response_decoded.get("ok")
+
+    def unlock_crown(self) -> bool: 
+        payload = { "account_auth": self.auth_token } 
+        params = { "key": self.access_key } 
+        response = requests.post(f"{__ENDPOINT_URL__}/unlock_crown", params=params, data=payload) 
+        response_decoded = response.json() 
+        return response_decoded.get("ok")
+        
+    def testin(self, custom):
+        payload = {
+        "account_auth": self.auth_token,
+        "custom": custom,
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/testin", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
+    
+    def telmunnongodz(self, car_id, custom):
+        payload = {
+        "account_auth": self.auth_token,
+        "car_id": car_id,
+        "custom": custom,
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/telmunnongodz", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
+        
+    def telmunnongonz(self, car_id, custom):
+        payload = {
+        "account_auth": self.auth_token,
+        "car_id": car_id,
+        "custom": custom,
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/telmunnongonz", params=params, data=payload)
         response_decoded = response.json()
         return response_decoded.get("ok")
