@@ -69,8 +69,6 @@ def load_player_data(cpm):
             
             print(Colorate.Horizontal(Colors.rainbow, f'Coins  : {data.get("coin")}.'))
             
-            friends_count = len(data.get("FriendsID", []))
-            
             print(Colorate.Horizontal(Colors.rainbow, f'Friends  : {data.get("friends_count")}.'))
             
         else:
