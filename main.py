@@ -61,15 +61,16 @@ def load_player_data(cpm):
         
             print(Colorate.Horizontal(Colors.rainbow, f'==========[ {__CHANNEL_USERNAME__} ]=========='))
             
-            print(Colorate.Horizontal(Colors.rainbow, f'Name   : {(data.get("Name") if "Name" in data else "UNDEFINED")}.'))
-                
-            print(Colorate.Horizontal(Colors.rainbow, f'LocalID: {data.get("localID")}.'))
-            
-            print(Colorate.Horizontal(Colors.rainbow, f'Money  : {data.get("money")}.'))
-            
-            print(Colorate.Horizontal(Colors.rainbow, f'Coins  : {data.get("coin")}.'))
-            
-            print(Colorate.Horizontal(Colors.rainbow, f'Friends  : {data.get("friends_count")}.'))
+            console.print(f"[bold white]   >> Name        : {data.get('Name', 'UNDEFINED')}[/bold white]")
+            console.print(f"[bold white]   >> LocalID     : {data.get('localID', 'UNDEFINED')}[/bold white]")
+            console.print(f"[bold white]   >> Moneys      : {data.get('money', 'UNDEFINED')}[/bold white]")
+            console.print(f"[bold white]   >> Coins       : {data.get('coin', 'UNDEFINED')}[/bold white]")
+            friends_count = len(data.get("FriendsID", []))
+            console.print(f"[bold white]   >> Friends     : {friends_count}[/bold white]")
+            car_data = data.get("carIDnStatus", {}).get("carGeneratedIDs", [])
+            unique_car_data = set(car_data)
+            car_count = len(unique_car_data)
+            console.print(f"[bold white]   >> Car Count   : {car_count}[/bold white]")
             
         else:
             print(Colorate.Horizontal(Colors.rainbow, '! ERROR: new accounts most be signed-in to the game at least once !.'))
