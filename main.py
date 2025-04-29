@@ -1,10 +1,8 @@
- #!/usr/bin/python
-
 import random
-import urllib.parse
 import requests
 from time import sleep
 import os, signal, sys
+from pyfiglet import figlet_format
 from rich.console import Console
 from rich.prompt import Prompt, IntPrompt
 from rich.text import Text
@@ -12,7 +10,10 @@ from rich.style import Style
 import pystyle
 from pystyle import Colors, Colorate
 
-from test import CPMTooldev
+from test import Pakundo
+
+__CHANNEL_USERNAME__ = "GMC2"
+__GROUP_USERNAME__   = "GMC2"
 
 def signal_handler(sig, frame):
     print("\n Bye Bye...")
@@ -35,77 +36,84 @@ def gradient_text(text, colors):
         colorful_text.append("\n")
     return colorful_text
 
-
 def banner(console):
     os.system('cls' if os.name == 'nt' else 'clear')
-    brand_name = "Tool version is 0.3"
-    
-    text = Text(brand_name, style="bold black")
-    
-    console.print(text)
-    console.print("[bold white] ============================================================[/bold white]")
-    console.print("[bold yellow]      𝗣𝗟𝗘𝗔𝗦𝗘 𝗟𝗢𝗚 𝗢𝗨𝗧 𝗙𝗥𝗢𝗠 𝗖𝗣𝗠 𝗕𝗘𝗙𝗢𝗥𝗘 𝗨𝗦𝗜𝗡𝗚 𝗧𝗛𝗜𝗦 𝗧𝗢𝗢𝗟[/bold yellow]")
-    console.print("[bold red]      𝗦𝗛𝗔𝗥𝗜𝗡𝗚 𝗧𝗛𝗘 𝗔𝗖𝗖𝗘𝗦 𝗞𝗘𝗬 𝗜𝗦 𝗡𝗢𝗧 𝗔𝗟𝗟𝗢𝗪𝗘𝗗[/bold red]")
-    console.print("[bold white] ============================================================[/bold white]")  
-    
+    brand_name = figlet_format('GMC', font='bloody')
+    colors = [
+        "rgb(255,0,0)", "rgb(255,69,0)", "rgb(255,140,0)", "rgb(255,215,0)", "rgb(173,255,47)", 
+        "rgb(0,255,0)", "rgb(0,255,255)", "rgb(0,191,255)", "rgb(0,0,255)", "rgb(139,0,255)",
+        "rgb(255,0,255)"
+    ]
+    colorful_text = gradient_text(brand_name, colors)
+    console.print(colorful_text)
+    print(Colorate.Horizontal(Colors.rainbow, '=================================================================='))
+    print(Colorate.Horizontal(Colors.rainbow, '\t         𝐏𝐋𝐄𝐀𝐒𝐄 𝐋𝐎𝐆𝐎𝐔𝐓 𝐅𝐑𝐎𝐌 𝐂𝐏𝐌 𝐁𝐄𝐅𝐎𝐑𝐄 𝐔𝐒𝐈𝐍𝐆 𝐓𝐇𝐈𝐒 𝐓𝐎𝐎𝐋'))
+    print(Colorate.Horizontal(Colors.rainbow, '    𝐒𝐇𝐀𝐑𝐈𝐍𝐆 𝐓𝐇𝐄 𝐀𝐂𝐂𝐄𝐒𝐒 𝐊𝐄𝐘 𝐈𝐒 𝐍𝐎𝐓 𝐀𝐋𝐋𝐎𝐖𝐄𝐃 𝐀𝐍𝐃 𝐖𝐈𝐋𝐋 𝐁𝐄 𝐁𝐋𝐎𝐂𝐊𝐄𝐃')) 
+    print(Colorate.Horizontal(Colors.rainbow, f'      𝐂𝐎𝐍𝐓𝐀𝐂𝐓 𝐌𝐄 𝐓𝐎 𝐁𝐔𝐘 𝐔𝐍𝐋𝐈𝐌𝐈𝐓𝐄𝐃 𝐁𝐀𝐋𝐀𝐍𝐂𝐄 𝐓𝐆 @{__CHANNEL_USERNAME__}')) 
+    print(Colorate.Horizontal(Colors.rainbow, f' ‌           𝐓𝐞𝐥𝐞𝐠𝐫𝐚𝐦: @{__CHANNEL_USERNAME__} 𝐎𝐫 @{__GROUP_USERNAME__}'))
+    print(Colorate.Horizontal(Colors.rainbow, '=================================================================='))
+
 def load_player_data(cpm):
     response = cpm.get_player_data()
-    
     if response.get('ok'):
         data = response.get('data')
-
         if all(key in data for key in ['floats', 'localID', 'money', 'coin', "integers"]):
+        
+            print(Colorate.Horizontal(Colors.rainbow, f'==========[ {__CHANNEL_USERNAME__} ]=========='))
             
-            console.print("[bold][red]========[/red][ ᴘʟᴀʏᴇʀ ᴅᴇᴛᴀɪʟꜱ ][red]========[/red][/bold]")
+            print(Colorate.Horizontal(Colors.rainbow, f'Name   : {(data.get("Name") if "Name" in data else "UNDEFINED")}.'))
+                
+            print(Colorate.Horizontal(Colors.rainbow, f'LocalID: {data.get("localID")}.'))
             
-            console.print(f"[bold white]   >> Name        : {data.get('Name', 'UNDEFINED')}[/bold white]")
-            console.print(f"[bold white]   >> LocalID     : {data.get('localID', 'UNDEFINED')}[/bold white]")
-            console.print(f"[bold white]   >> Moneys      : {data.get('money', 'UNDEFINED')}[/bold white]")
-            console.print(f"[bold white]   >> Coins       : {data.get('coin', 'UNDEFINED')}[/bold white]")
+            print(Colorate.Horizontal(Colors.rainbow, f'Money  : {data.get("money")}.'))
+            
+            print(Colorate.Horizontal(Colors.rainbow, f'Coins  : {data.get("coin")}.'))
+            
             friends_count = len(data.get("FriendsID", []))
-            console.print(f"[bold white]   >> Friends     : {friends_count}[/bold white]")
-            # Count Cars (Checking if it's nested)
+            print(Colorate.Horizontal(Colors.rainbow, f'Friends: {friends_count}.'))
             car_data = data.get("carIDnStatus", {}).get("carGeneratedIDs", [])
-            # Remove duplicates by converting the list to a set
             unique_car_data = set(car_data)
             car_count = len(unique_car_data)
-            console.print(f"[bold white]   >> Car Count   : {car_count}[/bold white]")
-       
+            print(Colorate.Horizontal(Colors.rainbow, f'Cars   : {car_count}.'))
+            
         else:
-            console.print("[bold red] '! ERROR: new accounts must be signed-in to the game at least once (✘)[/bold red]")
+            print(Colorate.Horizontal(Colors.rainbow, '! ERROR: new accounts most be signed-in to the game at least once !.'))
             exit(1)
     else:
-        console.print("[bold red] '! ERROR: seems like your login is not properly set (✘)[/bold red]")
+        print(Colorate.Horizontal(Colors.rainbow, '! ERROR: seems like your login is not properly set !.'))
         exit(1)
-     
+
 
 def load_key_data(cpm):
 
     data = cpm.get_key_data()
     
-    console.print("[bold][red]========[/red][ 𝘼𝘾𝘾𝙀𝙎𝙎 𝙆𝙀𝙔 𝘿𝙀𝙏𝘼𝙄𝙇𝙎 ][red]========[/red][/bold]")
+    print(Colorate.Horizontal(Colors.rainbow, f'========[ {__CHANNEL_USERNAME__} ]========'))
     
-    console.print(f"[bold white]   >> Access Key  [/bold white]: [black]{data.get('access_key')}[/black]")
+    print(Colorate.Horizontal(Colors.rainbow, f'Access Key : {data.get("access_key")}.'))
     
-    console.print(f"[bold white]   >> Telegram ID : {data.get('telegram_id')}[/bold white]")
+    print(Colorate.Horizontal(Colors.rainbow, f'Telegram ID: {data.get("telegram_id")}.'))
     
-    console.print(f"[bold white]   >> Balance     : {data.get('coins') if not data.get('is_unlimited') else 'Unlimited'}[/bold white]")
+    print(Colorate.Horizontal(Colors.rainbow, f'Balance $  : {(data.get("coins") if not data.get("is_unlimited") else "Unlimited")}.'))
+        
     
 
 def prompt_valid_value(content, tag, password=False):
     while True:
         value = Prompt.ask(content, password=password)
         if not value or value.isspace():
-            console.print(f"[bold red]{tag} cannot be empty or just spaces. Please try again (✘)[/bold red]")
+            print(Colorate.Horizontal(Colors.rainbow, f'{tag} cannot be empty or just spaces. Please try again.'))
         else:
             return value
             
 def load_client_details():
     response = requests.get("http://ip-api.com/json")
     data = response.json()
-    console.print("[bold red] =============[bold white][ 𝙇𝙊𝘾𝘼𝙏𝙄𝙊𝙉 ][/bold white]=============[/bold red]")
-    console.print(f"[bold white]    >> Country    : {data.get('country')} {data.get('zip')}[/bold white]")
-    console.print("[bold red] ===============[bold white][ ＭＥＮＵ ][/bold white]===========[/bold red]")
+    print(Colorate.Horizontal(Colors.rainbow, f'=============[ {__CHANNEL_USERNAME__} ]============='))
+    print(Colorate.Horizontal(Colors.rainbow, f'Ip Address : {data.get("query")}.'))
+    print(Colorate.Horizontal(Colors.rainbow, f'Location   : {data.get("city")} {data.get("regionName")} {data.get("countryCode")}.'))
+    print(Colorate.Horizontal(Colors.rainbow, f'Country    : {data.get("country")} {data.get("zip")}.'))
+    print(Colorate.Horizontal(Colors.rainbow, f'===============[ {__CHANNEL_USERNAME__} ]==============='))
 
 def interpolate_color(start_color, end_color, fraction):
     start_rgb = tuple(int(start_color[i:i+2], 16) for i in (1, 3, 5))
@@ -132,91 +140,96 @@ if __name__ == "__main__":
         acc_email = prompt_valid_value("[bold][?] Account Email[/bold]", "Email", password=False)
         acc_password = prompt_valid_value("[bold][?] Account Password[/bold]", "Password", password=False)
         acc_access_key = prompt_valid_value("[bold][?] Access Key[/bold]", "Access Key", password=False)
-        console.print("[bold yellow][%] Trying to Login[/bold yellow]: ", end=None)
-        cpm = CPMTooldev(acc_access_key)
+        console.print("[bold cyan][%] Trying to Login[/bold cyan]: ", end=None)
+        cpm = Pakundo(acc_access_key)
         login_response = cpm.login(acc_email, acc_password)
         if login_response != 0:
             if login_response == 100:
-                console.print("[bold red]ACCOUNT NOT FOUND (✘)[/bold red]")
+                print(Colorate.Horizontal(Colors.rainbow, 'ACCOUNT NOT FOUND.'))
                 sleep(2)
                 continue
             elif login_response == 101:
-                console.print("[bold red]WRONG PASSWORD (✘)[/bold red]")
+                print(Colorate.Horizontal(Colors.rainbow, 'WRONG PASSWORD.'))
                 sleep(2)
                 continue
             elif login_response == 103:
-                console.print("[bold red]INVALID ACCESS KEY (✘)[/bold red]")
+                print(Colorate.Horizontal(Colors.rainbow, 'INVALID ACCESS KEY.'))
                 sleep(2)
                 continue
             else:
-                console.print("[bold red]TRY AGAIN[/bold red]")
-                console.print("[bold yellow] '! Note: make sure you filled out the fields ![/bold yellow]")
+                print(Colorate.Horizontal(Colors.rainbow, 'TRY AGAIN.'))
+                print(Colorate.Horizontal(Colors.rainbow, '! Note: make sure you filled out the fields !.'))
                 sleep(2)
                 continue
         else:
-            console.print("[bold green]SUCCESSFUL (✔)[/bold green]")
-            sleep(1)
+            print(Colorate.Horizontal(Colors.rainbow, 'SUCCESSFUL.'))
+            sleep(2)
         while True:
             banner(console)
             load_player_data(cpm)
             load_key_data(cpm)
             load_client_details()
-            choices = ["00", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49"]
-            console.print("[bold yellow][bold white](01)[/bold white]: Increase Money                 [bold red]1.5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](02)[/bold white]: Increase Coins                 [bold red]1.5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](03)[/bold white]: King Rank                      [bold red]8K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](04)[/bold white]: Change ID                      [bold red]4.5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](05)[/bold white]: Change Name                    [bold red]100[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](06)[/bold white]: Change Name (Rainbow)          [bold red]100[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](07)[/bold white]: Number Plates                  [bold red]2K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](08)[/bold white]: Account Delete                 [bold red]Free[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](09)[/bold white]: Account Register               [bold red]Free[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](10)[/bold white]: Delete Friends                 [bold red]500[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](11)[/bold white]: Unlock Lamborghinis (ios only) [bold red]5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](12)[/bold white]: Unlock All Cars                [bold red]6K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](13)[/bold white]: Unlock All Cars Siren          [bold red]3.5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](14)[/bold white]: Unlock W16 Engine              [bold red]4K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](15)[/bold white]: Unlock All Horns               [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](16)[/bold white]: Unlock Disable Damage          [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](17)[/bold white]: Unlock Unlimited Fuel          [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](18)[/bold white]: Unlock Home 3                  [bold red]4K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](19)[/bold white]: Unlock Smoke                   [bold red]4K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](20)[/bold white]: Unlock Wheels                  [bold red]4K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](21)[/bold white]: Unlock Animations              [bold red]2K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](22)[/bold white]: Unlock Equipaments M           [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](23)[/bold white]: Unlock Equipaments F           [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](24)[/bold white]: Change Race Wins               [bold red]1K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](25)[/bold white]: Change Race Loses              [bold red]1K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](26)[/bold white]: Clone Account                  [bold red]7K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](27)[/bold white]: Custom HP                      [bold red]2.5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](28)[/bold white]: Custom Angle                   [bold red]1.5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](29)[/bold white]: Custom Tire burner             [bold red]1.5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](30)[/bold white]: Custom Car Millage             [bold red]1.5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](31)[/bold white]: Custom Car Brake               [bold red]2K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](32)[/bold white]: Remove Rear Bumper             [bold red]2K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](33)[/bold white]: Remove Front Bumper            [bold red]2K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](34)[/bold white]: Change Account Password        [bold red]2K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](35)[/bold white]: Change Account Email           [bold red]2K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](36)[/bold white]: Custom Spoiler                 [bold red]10K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](37)[/bold white]: Custom BodyKit                 [bold red]10K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](38)[/bold white]: Unlock Premium Wheels          [bold red]4.5K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](39)[/bold white]: Unlock Toyota Crown            [bold red]2K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](40)[/bold white]: Unlock Clan Hat (M)            [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](41)[/bold white]: Remove Head Male               [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](42)[/bold white]: Remove Head Female             [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](43)[/bold white]: Unlock Clan Top 1 (M)          [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](44)[/bold white]: Unlock Clan Top 2 (M)          [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](45)[/bold white]: Unlock Clan Top 3 (M)          [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](46)[/bold white]: Unlock Clan Top 1 (FM)         [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](47)[/bold white]: Unlock Clan Top 2 (FM)         [bold red]3K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](48)[/bold white]: Unlock Mercedes Cls            [bold red]4K[/bold red][/bold yellow]")
-            console.print("[bold yellow][bold white](0) [/bold white]: Exit From Tool [/bold yellow]")
+            choices = ["00", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53"]
+            print(Colorate.Horizontal(Colors.rainbow, '{01}: Increase Money '))
+            print(Colorate.Horizontal(Colors.rainbow, '{02}: Increase Coins'))
+            print(Colorate.Horizontal(Colors.rainbow, '{}: King Rank'))
+            print(Colorate.Horizontal(Colors.rainbow, '{04}: Change ID'))
+            print(Colorate.Horizontal(Colors.rainbow, '{05}: Change Name'))
+            print(Colorate.Horizontal(Colors.rainbow, '{06}: Change Name (Rainbow)'))
+            print(Colorate.Horizontal(Colors.rainbow, '{07}: Number Plates '))
+            print(Colorate.Horizontal(Colors.rainbow, '{08}: Account Delete'))
+            print(Colorate.Horizontal(Colors.rainbow, '{09}: Account Register'))
+            print(Colorate.Horizontal(Colors.rainbow, '{10}: Delete Friends'))
+            print(Colorate.Horizontal(Colors.rainbow, '{11}: Unlock Lamborghinis (ios only) '))
+            print(Colorate.Horizontal(Colors.rainbow, '{20}: Unlock All Cars'))
+            print(Colorate.Horizontal(Colors.rainbow, '{13}: Unlock All Cars Siren          '))
+            print(Colorate.Horizontal(Colors.rainbow, '{14}: Unlock W16 Engine              '))
+            print(Colorate.Horizontal(Colors.rainbow, '{15}: Unlock All Horns               '))
+            print(Colorate.Horizontal(Colors.rainbow, '{16}: Unlock Disable Damage          '))
+            print(Colorate.Horizontal(Colors.rainbow, '{17}:Unlock Unlimited Fuel          '))
+            print(Colorate.Horizontal(Colors.rainbow, '{18}: Unlock Home 3                  '))
+            print(Colorate.Horizontal(Colors.rainbow, '{19}: Unlock Smoke                   '))
+            print(Colorate.Horizontal(Colors.rainbow, '{20}: Unlock Wheels                  '))
+            print(Colorate.Horizontal(Colors.rainbow, '{31}: Unlock Animations              '))
+            print(Colorate.Horizontal(Colors.rainbow, '{22}: Unlock Equipaments M           '))
+            print(Colorate.Horizontal(Colors.rainbow, '{23}: Unlock Equipaments F           '))
+            print(Colorate.Horizontal(Colors.rainbow, '{24}: Change Race Wins               '))
+            print(Colorate.Horizontal(Colors.rainbow, '{25}: Change Race Loses              '))
+            print(Colorate.Horizontal(Colors.rainbow, '{26}:Clone Account                  '))
+            print(Colorate.Horizontal(Colors.rainbow, '{27}: Custom HP                      '))
+            print(Colorate.Horizontal(Colors.rainbow, '{28}: Custom Angle                   '))
+            print(Colorate.Horizontal(Colors.rainbow, '{29}:Custom Tire burner             '))
+            print(Colorate.Horizontal(Colors.rainbow, '{30}: Custom Car Millage             '))
+            print(Colorate.Horizontal(Colors.rainbow, '{31}: Custom Car Brake               '))
+            print(Colorate.Horizontal(Colors.rainbow, '{32}:: Remove Rear Bumper             '))
+            print(Colorate.Horizontal(Colors.rainbow, '{33}: Remove Front Bumper            '))
+            print(Colorate.Horizontal(Colors.rainbow, '{34}: Change Account Password        '))
+            print(Colorate.Horizontal(Colors.rainbow, '{35}: Change Account Email           '))
+            print(Colorate.Horizontal(Colors.rainbow, '{36}: Custom Spoiler                 '))
+            print(Colorate.Horizontal(Colors.rainbow, '{37}: Custom BodyKit                 '))
+            print(Colorate.Horizontal(Colors.rainbow, '{38}: Unlock Premium Wheels          '))
+            print(Colorate.Horizontal(Colors.rainbow, '{39}: Unlock Toyota Crown            '))
+            print(Colorate.Horizontal(Colors.rainbow, '{40}: Unlock Clan Hat (M)            '))
+            print(Colorate.Horizontal(Colors.rainbow, '{41}: Remove Head Male               '))
+            print(Colorate.Horizontal(Colors.rainbow, '{42}: Remove Head Female             '))
+            print(Colorate.Horizontal(Colors.rainbow, '{43}: Unlock Clan Top 1 (M)          '))
+            print(Colorate.Horizontal(Colors.rainbow, '{44}: Unlock Clan Top 2 (M)          '))
+            print(Colorate.Horizontal(Colors.rainbow, '{45}: Unlock Clan Top 3 (M)          '))
+            print(Colorate.Horizontal(Colors.rainbow, '{46}: Unlock Clan Top 1 (FM)         '))
+            print(Colorate.Horizontal(Colors.rainbow, '{47}: Unlock Clan Top 2 (FM)         '))
+            print(Colorate.Horizontal(Colors.rainbow, '{48}: Unlock Mercedes Cls            '))
+            print(Colorate.Horizontal(Colors.rainbow, '{49}: Stance Camber                  '))
+            print(Colorate.Horizontal(Colors.rainbow, '{50}: Copy livery To Another Car     '))
+            print(Colorate.Horizontal(Colors.rainbow, '{51}: Copy Livery To Another Account '))
+            print(Colorate.Horizontal(Colors.rainbow, '{52}: Clone Car To Another Account     '))
+            print(Colorate.Horizontal(Colors.rainbow, '{53}: Golden Glow Headlight     '))
+            print(Colorate.Horizontal(Colors.rainbow, '{0} : Exit'))
             
-            console.print("[bold red]===============[bold white][ 𝗧𝗮𝗻𝘇𝗮𝗻𝘀𝗵𝗼𝗽 ][/bold white]===============[/bold red]")
+            print(Colorate.Horizontal(Colors.rainbow, f'===============[ {__CHANNEL_USERNAME__} ]==============='))
             
             service = IntPrompt.ask(f"[bold][?] Select a Service [red][1-{choices[-1]} or 0][/red][/bold]", choices=choices, show_choices=False)
             
-            console.print("[bold red]===============[bold white][ 𝗧𝗮𝗻𝘇𝗮𝗻𝘀𝗵𝗼𝗽 ][/bold white]===============[/bold red]")
+            print(Colorate.Horizontal(Colors.rainbow, f'===============[ {__CHANNEL_USERNAME__} ]==============='))
             
             if service == 0: # Exit
                 console.print("[bold white] Thank You for using my tool[/bold white]")
@@ -282,7 +295,7 @@ if __name__ == "__main__":
                 console.print("[bold yellow] '[?] Enter your new ID[/bold yellow]")
                 new_id = Prompt.ask("[?] ID")
                 console.print("[%] Saving your data: ", end=None)
-                if len(new_id) >= 0 and len(new_id) <= 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999 and (' ' in new_id) == False:
+                if len(new_id) >= 8 and len(new_id) <= 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999 and (' ' in new_id) == False:
                     if cpm.set_player_localid(new_id.upper()):
                         console.print("[bold yellow] 'SUCCESSFUL[/bold yellow]")
                         console.print("[bold yellow] '======================================[/bold yellow]")
@@ -739,18 +752,18 @@ if __name__ == "__main__":
                     console.print("[bold red]Please Try Again[/bold red]")
                     sleep(2)
                     continue
-            elif service == 75:  # /testin endpoint
-                console.print("[bold]ENTER CUSTOM FLOAT DATA[/bold]")
-                custom = IntPrompt.ask("[bold][?] VALUE (e.g. 1 or 0)[/bold]")     # This is the value
-                console.print(f"[bold red][%] Setting float key... [/bold red]", end=None)
-                if cpm.testin(custom):
+            elif service == 53: # headlight
+                console.print("[bold]ENTER CAR DETAILS![/bold]")
+                car_id = IntPrompt.ask("[bold][?] CAR ID [/bold]")                
+                console.print("[bold red][%] GIVING CHROME HEADLIGHT [/bold red]: ", end=None)
+                if cpm.headlight(car_id):
                     console.print("[bold green]SUCCESSFUL (✔)[/bold green]")
                     answ = Prompt.ask("[bold][?] DO YOU WANT TO EXIT[/bold] ?", choices=["y", "n"], default="n")
                     if answ == "y": console.print("[bold white] Thank You for using my tool[/bold white]")
                     else: continue
                 else:
-                    console.print("[bold yellow]FAILED[/bold yellow]")
-                    console.print("[bold yellow]PLEASE TRY AGAIN[/bold yellow]")
+                    console.print("[bold red]FAILED[/bold red]")
+                    console.print("[bold red]Please Try Again[/bold red]")
                     sleep(2)
                     continue
             elif service == 34:
@@ -790,6 +803,76 @@ if __name__ == "__main__":
                 custom = IntPrompt.ask("[bold blue][?]INSERT BODYKIT ID[/bold blue]")                
                 console.print("[bold red][%] SAVING YOUR DATA [/bold red]: ", end=None)
                 if cpm.telmunnongonz(car_id, custom):
+                    console.print("[bold green]SUCCESSFUL (✔)[/bold green]")
+                    answ = Prompt.ask("[bold][?] DO YOU WANT TO EXIT[/bold] ?", choices=["y", "n"], default="n")
+                    if answ == "y": console.print("[bold white] Thank You for using my tool[/bold white]")
+                    else: continue
+                else:
+                    console.print("[bold red]FAILED[/bold red]")
+                    console.print("[bold red]Please Try Again[/bold red]")
+                    sleep(2)
+                    continue
+            elif service == 50: # copy_livery
+                console.print("[bold]ENTER SOURCE CAR ID![/bold]")
+                source_car_id = IntPrompt.ask("[bold][?] CAR ID[/bold]")
+                console.print("[bold]ENTER TARGET CAR ID![/bold]")
+                target_car_id = IntPrompt.ask("[bold blue][?]INSERT TARGET CAR ID[/bold blue]")                
+                console.print("[bold red][%] COPYING LIVERY [/bold red]: ", end=None)
+                if cpm.copy_livery(source_car_id, target_car_id):
+                    console.print("[bold green]SUCCESSFUL (✔)[/bold green]")
+                    answ = Prompt.ask("[bold][?] DO YOU WANT TO EXIT[/bold] ?", choices=["y", "n"], default="n")
+                    if answ == "y": console.print("[bold white] Thank You for using my tool[/bold white]")
+                    else: continue
+                else:
+                    console.print("[bold red]FAILED[/bold red]")
+                    console.print("[bold red]Please Try Again[/bold red]")
+                    sleep(2)
+                    continue
+            elif service == 51: # copy_livery
+                console.print("[bold]ENTER SOURCE CAR ID![/bold]")
+                source_car_id = IntPrompt.ask("[bold][?] CAR ID[/bold]")
+                console.print("[bold]ENTER TARGET ACCOUNT EMAIL![/bold]")
+                target_email = prompt_valid_value("[bold blue][?]INSERT TARGET ACCOUNT EMAIL[/bold blue]", "Email", password=False)
+                console.print("[bold]ENTER TARGET ACCOUNT PASSWORD![/bold]")
+                target_password = prompt_valid_value("[bold][?] TARGET ACCOUNT PASSWORD[/bold]", "Password", password=False)
+                console.print("[bold]ENTER TARGET CAR ID![/bold]")
+                target_car_id = IntPrompt.ask("[bold blue][?]INSERT TARGET CAR ID[/bold blue]")
+                console.print("[bold red][%] COPYING LIVERY [/bold red]: ", end=None)
+                if cpm.copy_car_to(source_car_id, target_email, target_password, target_car_id):
+                    console.print("[bold green]SUCCESSFUL (✔)[/bold green]")
+                    answ = Prompt.ask("[bold][?] DO YOU WANT TO EXIT[/bold] ?", choices=["y", "n"], default="n")
+                    if answ == "y": console.print("[bold white] Thank You for using my tool[/bold white]")
+                    else: continue
+                else:
+                    console.print("[bold red]FAILED[/bold red]")
+                    console.print("[bold red]Please Try Again[/bold red]")
+                    sleep(2)
+                    continue
+            elif service == 52: # copy_livery
+                console.print("[bold]ENTER SOURCE CAR ID![/bold]")
+                source_car_id = IntPrompt.ask("[bold][?] CAR ID[/bold]")
+                console.print("[bold]ENTER TARGET ACCOUNT EMAIL![/bold]")
+                target_email = prompt_valid_value("[bold blue][?]INSERT TARGET ACCOUNT EMAIL[/bold blue]", "Email", password=False)
+                console.print("[bold]ENTER TARGET ACCOUNT PASSWORD![/bold]")
+                target_password = prompt_valid_value("[bold][?] TARGET ACCOUNT PASSWORD[/bold]", "Password", password=False)
+                console.print("[bold red][%] COPYING LIVERY [/bold red]: ", end=None)
+                if cpm.clone_car_to(source_car_id, target_email, target_password):
+                    console.print("[bold green]SUCCESSFUL (✔)[/bold green]")
+                    answ = Prompt.ask("[bold][?] DO YOU WANT TO EXIT[/bold] ?", choices=["y", "n"], default="n")
+                    if answ == "y": console.print("[bold white] Thank You for using my tool[/bold white]")
+                    else: continue
+                else:
+                    console.print("[bold red]FAILED[/bold red]")
+                    console.print("[bold red]Please Try Again[/bold red]")
+                    sleep(2)
+                    continue
+            elif service == 49: # telmunnongonz
+                console.print("[bold]ENTER CAR DETAILS![/bold]")
+                car_id = IntPrompt.ask("[bold][?] CAR ID[/bold]")
+                console.print("[bold]ENTER VALUE FOR STANCE [/bold]")
+                custom = IntPrompt.ask("[bold blue][?]INSERT VALUE[/bold blue]")                
+                console.print("[bold red][%] SAVING YOUR DATA [/bold red]: ", end=None)
+                if cpm.incline(car_id, custom):
                     console.print("[bold green]SUCCESSFUL (✔)[/bold green]")
                     answ = Prompt.ask("[bold][?] DO YOU WANT TO EXIT[/bold] ?", choices=["y", "n"], default="n")
                     if answ == "y": console.print("[bold white] Thank You for using my tool[/bold white]")
@@ -955,8 +1038,6 @@ if __name__ == "__main__":
                     console.print("[bold red]FAILED[/bold red]")
                     console.print("[bold red]Please Try Again[/bold red]")
                     sleep(2)
-                    continue
-            else:
-                continue
+                    continue        
+            else: continue
             break
-        break              

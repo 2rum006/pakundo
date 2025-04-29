@@ -4,9 +4,9 @@ import requests
 import subprocess
 import urllib.parse
 
-__ENDPOINT_URL__: str = "https://telmunnshop.squareweb.app/api"
+__ENDPOINT_URL__: str = "https://garden.squareweb.app/api"
 
-class CPMTooldev:
+class Pakundo:
     def __init__(self, access_key) -> None:
         self.auth_token = None
         self.access_key = access_key
@@ -414,6 +414,17 @@ class CPMTooldev:
         response = requests.post(f"{__ENDPOINT_URL__}/millage_car", params=params, data=payload)
         response_decoded = response.json()
         return response_decoded.get("ok")
+        
+    def millage_car(self, car_id, custom):
+        payload = {
+        "account_auth": self.auth_token,
+        "car_id": car_id,
+        "custom": custom,
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/millage_car", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
 
     def brake_car(self, car_id, custom):
         payload = {
@@ -423,6 +434,16 @@ class CPMTooldev:
         }
         params = {"key": self.access_key}
         response = requests.post(f"{__ENDPOINT_URL__}/brake_car", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
+        
+    def headlight(self, car_id):
+        payload = {
+        "account_auth": self.auth_token,
+        "car_id": car_id
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/headlight", params=params, data=payload)
         response_decoded = response.json()
         return response_decoded.get("ok")
 
@@ -459,16 +480,6 @@ class CPMTooldev:
         response = requests.post(f"{__ENDPOINT_URL__}/front_bumper", params=params, data=payload)
         response_decoded = response.json()
         return response_decoded.get("ok")
-        
-    def testin(self, custom):
-        payload = {
-        "account_auth": self.auth_token,
-        "custom": custom,
-        }
-        params = {"key": self.access_key}
-        response = requests.post(f"{__ENDPOINT_URL__}/testin", params=params, data=payload)
-        response_decoded = response.json()
-        return response_decoded.get("ok")
     
     def telmunnongodz(self, car_id, custom):
         payload = {
@@ -492,21 +503,57 @@ class CPMTooldev:
         response_decoded = response.json()
         return response_decoded.get("ok")
         
-    def copy_livery(self, source_car_id, target_car_id) -> bool:
+    def incline(self, car_id, custom):
+        payload = {
+        "account_auth": self.auth_token,
+        "car_id": car_id,
+        "custom": custom,
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/incline", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
+
+    def copy_livery(self, source_car_id, target_car_id):
         payload = {
         "account_auth": self.auth_token,
         "source_car_id": source_car_id,
-        "target_car_id": target_car_id
+        "target_car_id": target_car_id,
         }
         params = {"key": self.access_key}
         response = requests.post(f"{__ENDPOINT_URL__}/copy_livery", params=params, data=payload)
         response_decoded = response.json()
-        print(response_decoded)
-        return response_decoded.get("ok", False)
+        return response_decoded.get("ok")
         
-    def shittin(self) -> bool:
-        payload = { "account_auth": self.auth_token }
-        params = { "key": self.access_key }
-        response = requests.post(f"{__ENDPOINT_URL__}/shittin", params=params, data=payload)
+    def clone_car_to(self, source_car_id, target_email, target_password):
+        payload = {
+        "account_auth": self.auth_token,
+        "source_car_id": source_car_id,
+        "target_email": target_email,
+        "target_password": target_password
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/clone_car_to", params=params, data=payload)
         response_decoded = response.json()
         return response_decoded.get("ok")
+        
+    def copy_car_to(self, source_car_id, target_email, target_password, target_car_id):
+        payload = {
+        "account_auth": self.auth_token,
+        "source_car_id": source_car_id,
+        "target_email": target_email,
+        "target_password": target_password,
+        "target_car_id": target_password
+        }
+        params = {"key": self.access_key}
+        response = requests.post(f"{__ENDPOINT_URL__}/copy_car_to", params=params, data=payload)
+        response_decoded = response.json()
+        return response_decoded.get("ok")
+
+    def shittin(self) -> bool: 
+        payload = { "account_auth": self.auth_token } 
+        params = { "key": self.access_key } 
+        response = requests.post(f"{__ENDPOINT_URL__}/shittin", params=params, data=payload) 
+        response_decoded = response.json() 
+        return response_decoded.get("ok")
+
