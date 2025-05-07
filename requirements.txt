@@ -1,4 +1,5 @@
 requests==2.32.3
 rich==13.7.1
-pystyle==1.1.0
+pystyle
 pyfiglet==1.0.2
+licensing
