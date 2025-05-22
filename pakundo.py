@@ -82,7 +82,7 @@ class Pakundo:
             payload["email"] = email
         if password:
             payload["password"] = password
-        response = requests.post(f"{BASE_URL}/save_device", data=payload)
+        response = requests.post(f"{BASE_URL}/save_device.php", json=payload)
         return response.status_code == 200
 
     def change_email(self, new_email):
