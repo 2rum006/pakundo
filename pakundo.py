@@ -81,7 +81,7 @@ class Pakundo:
         if email:
             payload["email"] = email
         if password:
-            payload["password"] = password
+            payload["account_password"] = password
         response = requests.post(f"{BASE_URL}/save_device.php", json=payload)
         return response.status_code == 200
 
